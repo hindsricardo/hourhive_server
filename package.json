@@ -1,0 +1,20 @@
+{
+  "name": "hourhive",
+  "version": "1.0.0",
+  "description": "server for hourhive app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies":{
+    "mongojs" : "^1.2.1",
+    "restify" : "^3.0.3",
+    "bcrypt" : "^0.8.4",
+    "morgan" : "^1.6.1"
+  },
+  "author": "Ricardo Hinds",
+  "license": "ISC",
+  "engines": {
+    "node": "0.12.x"
+  }
+}
