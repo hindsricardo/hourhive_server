@@ -2,7 +2,7 @@ var pwdMgr = require('./managePasswords');
 
 module.exports = function (server, db) {
     // unique index
-    db.users.ensureIndex({
+    db.appUsers.ensureIndex({
         email: 1
     }, {
         unique: true
@@ -49,6 +49,12 @@ module.exports = function (server, db) {
         db.appUsers.findOne({
             email: req.params.email
         }, function (err, dbUser) {
+            if(!dbUser){//if the database finds no email, it will return null, but any falsey will also mean something's amiss
+                res.writeHead(403, contentTypeTipo);
+                res.end(JSON.stringify({
+                    error: 'Invalid credentials. User not found.'
+                }));
+            }
 
 
             pwdMgr.comparePassword(user.password, dbUser.password, function (err, isPasswordMatch) {
