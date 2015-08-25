@@ -19,7 +19,7 @@ module.exports = function (server, db) {
                             res.writeHead(400, {
                                 'Content-Type': 'application/json; charset=utf-8'
                             });
-                            res.send(JSON.stringify({
+                            res.end(JSON.stringify({
                                 error: err,
                                 message: "A user with this email already exists"
                             }));
@@ -29,7 +29,7 @@ module.exports = function (server, db) {
                             'Content-Type': 'application/json; charset=utf-8'
                         });
                         dbUser.password = "";
-                        res.send(JSON.stringify(dbUser));
+                        res.end(JSON.stringify(dbUser));
                     }
                 });
         });
@@ -42,7 +42,7 @@ module.exports = function (server, db) {
             res.writeHead(403, {
                 'Content-Type': 'application/json; charset=utf-8'
             });
-            res.send(JSON.stringify({
+            res.end(JSON.stringify({
                 error: "Invalid Credentials"
             }));
         }
@@ -51,7 +51,7 @@ module.exports = function (server, db) {
         }, function (err, dbUser) {
             if(!dbUser){//if the database finds no email, it will return null, but any falsey will also mean something's amiss
                 res.writeHead(403, contentTypeTipo);
-                res.send(JSON.stringify({
+                res.end(JSON.stringify({
                     error: 'Invalid credentials. User not found.'
                 }));
             }
@@ -65,12 +65,12 @@ module.exports = function (server, db) {
                     });
                     // remove password hash before sending to the client
                     dbUser.password = "";
-                    res.send(JSON.stringify(dbUser));
+                    res.end(JSON.stringify(dbUser));
                 } else {
                     res.writeHead(403, {
                         'Content-Type': 'application/json; charset=utf-8'
                     });
-                    res.send(JSON.stringify({
+                    res.end(JSON.stringify({
                         error: "Invalid User"
                     }));
                 }

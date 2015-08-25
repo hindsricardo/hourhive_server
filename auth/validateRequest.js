@@ -12,7 +12,7 @@ module.exports.validate = function (req, res, db, callback) {
         res.writeHead(403, {
             'Content-Type': 'application/json; charset=utf-8'
         });
-        res.send(JSON.stringify({
+        res.end(JSON.stringify({
             error: "You are not authorized to access this application",
             message: "An Email is required as part of the header"
         }));
@@ -24,7 +24,7 @@ module.exports.validate = function (req, res, db, callback) {
             res.writeHead(403, {
                 'Content-Type': 'application/json; charset=utf-8'
             });
-            res.send(JSON.stringify({
+            res.end(JSON.stringify({
                 error: "You are not authorized to access this application",
                 message: "Invalid User Email"
             }));
