@@ -9,7 +9,7 @@ module.exports = function (server, db) {
                 res.writeHead(200, {
                     'Content-Type': 'application/json; charset=utf-8'
                 });
-                res.end(JSON.stringify(list));
+                res.send(JSON.stringify(list));
             });
         });
         return next();
@@ -23,7 +23,7 @@ module.exports = function (server, db) {
                 res.writeHead(200, {
                     'Content-Type': 'application/json; charset=utf-8'
                 });
-                res.end(JSON.stringify(data));
+                res.send(JSON.stringify(data));
             });
         });
         return next();
@@ -37,7 +37,7 @@ module.exports = function (server, db) {
                     res.writeHead(200, {
                         'Content-Type': 'application/json; charset=utf-8'
                     });
-                    res.end(JSON.stringify(data));
+                    res.send(JSON.stringify(data));
                 });
         });
         return next();
@@ -67,7 +67,7 @@ module.exports = function (server, db) {
                     res.writeHead(200, {
                         'Content-Type': 'application/json; charset=utf-8'
                     });
-                    res.end(JSON.stringify(data));
+                    res.send(JSON.stringify(data));
                 });
             });
         });
@@ -82,7 +82,7 @@ module.exports = function (server, db) {
                 res.writeHead(200, {
                     'Content-Type': 'application/json; charset=utf-8'
                 });
-                res.end(JSON.stringify(data));
+                res.send(JSON.stringify(data));
             });
             return next();
         });
