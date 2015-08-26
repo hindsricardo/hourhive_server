@@ -7,7 +7,6 @@ var server      =   restify.createServer();
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
-server.use(restify.fullResponse());
 server.use(morgan('dev')); // LOGGER
 
 // CORS
