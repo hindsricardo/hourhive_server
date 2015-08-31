@@ -1,8 +1,9 @@
 var restify     =   require('restify');
 var mongojs     =   require('mongojs');
 var	morgan  	= 	require('morgan');
-var db          =   mongojs('mongodb://hindsricardo:Car81you@dogen.mongohq.com:10096/bucketlist', ['appUsers','bucketLists']);
+var db          =   mongojs('mongodb://hindsricardo:Car81you@dogen.mongohq.com:10096/bucketlist', ['appUsers','bucketLists','appOrgs']);
 var server      =   restify.createServer();
+
 
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
@@ -16,6 +17,7 @@ server.use(function(req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     next();
 });
+
 
 server.listen(process.env.PORT || 9804, function () {
     console.log("Server started @ ", process.env.PORT || 9804);
