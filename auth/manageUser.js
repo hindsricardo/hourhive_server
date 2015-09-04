@@ -120,7 +120,7 @@ module.exports = function (server, db, passport) {
 
     server.post('/api/v1/bucketList/org/auth/login', function (req, res, next) {
         var user = req.params;
-        if (user.email.trim().length == 0 || user.password.trim().length == 0) {
+        if (user.email.trim().length == 0 || user.password.trim().length == 0 || user.accountUsername.trim().length == 0) {
             res.writeHead(403, {
                 'Content-Type': 'application/json; charset=utf-8'
             });
@@ -128,25 +128,34 @@ module.exports = function (server, db, passport) {
                 error: "Invalid Credentials"
             }));
         }
-        db.appUsers.findOne({
-            email: req.params.email
+        db.appOrgs.findOne({
+            accountUsername: req.params.accountUsername,
+            staff:{$elemMatch:{ email: req.params.email}}
         }, function (err, dbUser) {
-            if(!dbUser){//if the database finds no email, it will return null, but any falsey will also mean something's amiss
+            if(!dbUser){
                 res.writeHead(403, contentTypeTipo);
                 res.end(JSON.stringify({
                     error: 'Invalid credentials. User not found.'
                 }));
             }
 
-
-            pwdMgr.comparePassword(user.password, dbUser.password, function (err, isPasswordMatch) {
+            function findStaffMember() {
+                var found;
+                dbUser.staff.forEach(function (staff) {
+                    if (user.email == staff.email && user.password == staff.password) {
+                        found = staff;
+                    }
+                });
+                return found;
+            }
+            pwdMgr.comparePassword(user.password, findStaffMember().password, function (err, isPasswordMatch) {
 
                 if (isPasswordMatch) {
                     res.writeHead(200, {
                         'Content-Type': 'application/json; charset=utf-8'
                     });
                     // remove password hash before sending to the client
-                    dbUser.password = "";
+                    findStaffMember().password = "";
                     res.end(JSON.stringify(dbUser));
                 } else {
                     res.writeHead(403, {
