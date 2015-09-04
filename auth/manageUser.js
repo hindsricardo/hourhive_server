@@ -120,6 +120,7 @@ module.exports = function (server, db, passport) {
 
     server.post('/api/v1/bucketList/org/auth/login', function (req, res, next) {
         var user = req.params;
+        console.log(user);
         if (user.email.trim().length == 0 || user.password.trim().length == 0 || user.accountUsername.trim().length == 0) {
             res.writeHead(403, {
                 'Content-Type': 'application/json; charset=utf-8'
@@ -149,7 +150,7 @@ module.exports = function (server, db, passport) {
                 });
                 return found;
             }
-            console.log(findStaffMember());
+            console.log(findStaffMember(), "test test");
             pwdMgr.comparePassword(user.password, findStaffMember().password, function (err, isPasswordMatch) {
                 if(err)
                     console.log(err);
