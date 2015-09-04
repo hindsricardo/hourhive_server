@@ -137,6 +137,9 @@ module.exports = function (server, db, passport) {
                 res.end(JSON.stringify({
                     error: 'Invalid credentials. User not found.'
                 }));
+                if(err)
+                    console.log(err);//TODO
+
             }
 
             function findStaffMember() {
@@ -148,7 +151,10 @@ module.exports = function (server, db, passport) {
                 });
                 return found;
             }
+            console.log(findStaffMember());
             pwdMgr.comparePassword(user.password, findStaffMember().password, function (err, isPasswordMatch) {
+                if(err)
+                    console.log(err);
 
                 if (isPasswordMatch) {
                     res.writeHead(200, {
