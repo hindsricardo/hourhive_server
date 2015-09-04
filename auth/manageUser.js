@@ -132,14 +132,13 @@ module.exports = function (server, db, passport) {
             accountUsername: req.params.accountUsername,
             staff:{$elemMatch:{ email: req.params.email}}
         }, function (err, dbUser) {
+            if(err)
+                console.log(err);//TODO
             if(!dbUser){
                 res.writeHead(403, contentTypeTipo);
                 res.end(JSON.stringify({
                     error: 'Invalid credentials. User not found.'
                 }));
-                if(err)
-                    console.log(err);//TODO
-
             }
 
             function findStaffMember() {
