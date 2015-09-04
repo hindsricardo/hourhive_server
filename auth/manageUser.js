@@ -47,8 +47,8 @@ module.exports = function (server, db, passport) {
     // ORG REGISTER
     server.post('/api/v1/bucketList/org/auth/register', function (req, res, next) {
         var user = req.params;
-        pwdMgr.cryptPassword(user.password, function (err, hash) {
-            user.password = hash;
+        pwdMgr.cryptPassword(user.staff[0].password, function (err, hash) {
+            user.staff[0].password = hash;
             db.appOrgs.insert(user,
                 function (err, dbUser) {
                     if (err) { // duplicate key error
@@ -58,14 +58,14 @@ module.exports = function (server, db, passport) {
                             });
                             res.end(JSON.stringify({
                                 error: err,
-                                message: "A user with this email already exists"
+                                message: "An Organization with this name already exists"
                             }));
                         }
                     } else {
                         res.writeHead(200, {
                             'Content-Type': 'application/json; charset=utf-8'
                         });
-                        dbUser.password = "";
+                        dbUser.staff[0].password = "";
                         res.end(JSON.stringify(dbUser));
                     }
                 });
