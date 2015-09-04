@@ -129,8 +129,7 @@ module.exports = function (server, db, passport) {
             }));
         }
         db.appOrgs.findOne({
-            accountUsername: req.params.accountUsername,
-            staff:{$elemMatch:{ email: req.params.email}}
+            accountUsername: req.params.accountUsername
         }, function (err, dbUser) {
             if(err)
                 console.log(err);//TODO
