@@ -10,7 +10,7 @@ module.exports = function (server, db, passport) {
     })
 
     db.appOrgs.createIndex({
-        orgName: 1
+        accountUsername: 1
     },{
         unique: true
     })
@@ -58,7 +58,7 @@ module.exports = function (server, db, passport) {
                             });
                             res.end(JSON.stringify({
                                 error: err,
-                                message: "An Organization with this name already exists"
+                                message: "An Organization with this username already exists"
                             }));
                         }
                     } else {
