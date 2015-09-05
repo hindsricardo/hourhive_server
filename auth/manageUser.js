@@ -141,7 +141,7 @@ module.exports = function (server, db, passport) {
                 }));
             }
 
-            function findStaffMember() {
+            var findStaffMember = function() {
                 var found;
                 dbUser.staff.forEach(function (staff) {
                     if (user.email == staff.email && user.password == staff.password) {
