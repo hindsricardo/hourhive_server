@@ -133,16 +133,6 @@ module.exports = function (server, db) {
         db.appOrgs.findOne({
             accountUsername: user.accountUsername
         }, function (err, dbUser) {
-            var findStaffMember = function() {
-                var found;
-                dbUser.staff.forEach(function (staff) {
-                    if (user.email == staff.email) { //EMAILS CANNOT BE DUPLICATED OR ONLY THE LAST STAFF EMAIL FOUND WILL BE RETURNED.
-                        found = staff;
-                    }
-                });
-                return  found;
-            };
-            console.log(findStaffMember());
 
             if(err)
                 console.log(err);//TODO
@@ -153,17 +143,26 @@ module.exports = function (server, db) {
                 }));
             }
 
-            pwdMgr.comparePassword(user.password, findStaffMember().password, function (err, isPasswordMatch) {
-                if(err)
-                    console.log(err);
+            var findStaffMember = function(org) {
+                var person;
+                org.staff.forEach(function (staff) {
+                    if (user.email == staff.email) { //EMAILS CANNOT BE DUPLICATED OR ONLY THE LAST STAFF EMAIL FOUND WILL BE RETURNED.
+                        person = staff;
+
+                    }
+                });
+                return  person;
+            };
+
+            pwdMgr.comparePassword(user.password, findStaffMember(dbUser).password, function (err, isPasswordMatch) {
 
                 if (isPasswordMatch) {
                     res.writeHead(200, {
                         'Content-Type': 'application/json; charset=utf-8'
                     });
                     // remove password hash before sending to the client
-                    findStaffMember().password = "";
-                    res.end(JSON.stringify(findStaffMember()));
+                    findStaffMember(dbUser).password = "";
+                    res.end(JSON.stringify(findStaffMember(dbUser)));
                 } else {
                     res.writeHead(403, {
                         'Content-Type': 'application/json; charset=utf-8'
@@ -172,9 +171,9 @@ module.exports = function (server, db) {
                         error: "Invalid User"
                     }));
                 }
+                console.log(findStaffMember(dbUser), "test test");
 
             });
-            console.log(findStaffMember(), "test test");
 
         });
         return next();
