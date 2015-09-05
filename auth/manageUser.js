@@ -120,12 +120,12 @@ module.exports = function (server, db) {
 
     server.post('/api/v1/bucketList/org/auth/login', function (req, res, next) {
         var user = req.params;
-        var findStaffMember;
         console.log(user);
         if (user.email.trim().length == 0 || user.password.trim().length == 0 || user.accountUsername.trim().length == 0) {
             res.writeHead(403, {
                 'Content-Type': 'application/json; charset=utf-8'
             });
+            console.log("testing something");//TODO DELETE
             res.end(JSON.stringify({
                 error: "Invalid Credentials"
             }));
@@ -133,7 +133,7 @@ module.exports = function (server, db) {
         db.appOrgs.findOne({
             accountUsername: user.accountUsername
         }, function (err, dbUser) {
-            findStaffMember = function() {
+            var findStaffMember = function() {
                 var found;
                 dbUser.staff.forEach(function (staff) {
                     if (user.email == staff.email) { //EMAILS CANNOT BE DUPLICATED OR ONLY THE LAST STAFF EMAIL FOUND WILL BE RETURNED.
