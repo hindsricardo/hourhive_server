@@ -133,6 +133,7 @@ module.exports = function (server, db) {
         db.appOrgs.findOne({
             accountUsername: req.params.accountUsername
         }, function (err, dbUser) {
+            console.log(dbUser);
 
             if(err)
                 console.log(err);//TODO
