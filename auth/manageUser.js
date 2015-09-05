@@ -1,7 +1,7 @@
 var pwdMgr = require('./managePasswords');
 
 
-module.exports = function (server, db, passport) {
+module.exports = function (server, db) {
     // unique index
     db.appUsers.createIndex({
         email: 1
@@ -163,7 +163,7 @@ module.exports = function (server, db, passport) {
                     });
                     // remove password hash before sending to the client
                     findStaffMember().password = "";
-                    res.end(JSON.stringify(dbUser));
+                    res.end(JSON.stringify(findStaffMember()));
                 } else {
                     res.writeHead(403, {
                         'Content-Type': 'application/json; charset=utf-8'
