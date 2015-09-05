@@ -86,7 +86,7 @@ module.exports = function (server, db) {
         db.appUsers.findOne({
             email: req.params.email
         }, function (err, dbUser) {
-            if(!dbUser){//if the database finds no email, it will return null, but any falsey will also mean something's amiss
+            if(!dbUser || dbUser == null){//if the database finds no email, it will return null, but any falsey will also mean something's amiss
                 res.writeHead(403, contentTypeTipo);
                 res.end(JSON.stringify({
                     error: 'Invalid credentials. User not found.'
@@ -137,7 +137,7 @@ module.exports = function (server, db) {
 
             if(err)
                 console.log(err);//TODO
-            if(!dbUser){
+            if(!dbUser || dbUser == null){
                 res.writeHead(403, contentTypeTipo);
                 res.end(JSON.stringify({
                     error: 'Invalid credentials. User not found.'
