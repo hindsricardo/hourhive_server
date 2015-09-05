@@ -143,7 +143,7 @@ module.exports = function (server, db) {
                 }));
             }
 
-            var findStaffMember = function(org) {
+            /*var findStaffMember = function(org) {
                 var person;
                 org.staff.forEach(function (staff) {
                     if (user.email == staff.email) { //EMAILS CANNOT BE DUPLICATED OR ONLY THE LAST STAFF EMAIL FOUND WILL BE RETURNED.
@@ -152,17 +152,17 @@ module.exports = function (server, db) {
                     }
                 });
                 return  person;
-            };
+            };*/
 
-            pwdMgr.comparePassword(user.password, findStaffMember(dbUser).password, function (err, isPasswordMatch) {
+            pwdMgr.comparePassword(user.password, dbUser.staff[0].password, function (err, isPasswordMatch) {
 
                 if (isPasswordMatch) {
                     res.writeHead(200, {
                         'Content-Type': 'application/json; charset=utf-8'
                     });
                     // remove password hash before sending to the client
-                    findStaffMember(dbUser).password = "";
-                    res.end(JSON.stringify(findStaffMember(dbUser)));
+                    dbUser.staff[0].password = "";
+                    res.end(JSON.stringify(findStaffMember(dbUser.staff[0])));
                 } else {
                     res.writeHead(403, {
                         'Content-Type': 'application/json; charset=utf-8'
@@ -171,7 +171,7 @@ module.exports = function (server, db) {
                         error: "Invalid User"
                     }));
                 }
-                console.log(findStaffMember(dbUser), "test test");
+                console.log(dbUser.staff[0].password, "test test");
 
             });
 
