@@ -136,12 +136,13 @@ module.exports = function (server, db, passport) {
             findStaffMember = function() {
                 var found;
                 dbUser.staff.forEach(function (staff) {
-                    if (user.email == staff.email && user.password == staff.password) {
+                    if (user.email == staff.email) {
                         found = staff;
                     }
                 });
                 return  found;
             };
+            console.log(findStaffMember());
 
             if(err)
                 console.log(err);//TODO
