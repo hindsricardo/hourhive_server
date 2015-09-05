@@ -131,12 +131,12 @@ module.exports = function (server, db, passport) {
             }));
         }
         db.appOrgs.findOne({
-            accountUsername: req.params.accountUsername
+            accountUsername: user.accountUsername
         }, function (err, dbUser) {
             findStaffMember = function() {
                 var found;
                 dbUser.staff.forEach(function (staff) {
-                    if (user.email == staff.email) {
+                    if (user.email == staff.email) { //EMAILS CANNOT BE DUPLICATED OR ONLY THE LAST STAFF EMAIL FOUND WILL BE RETURNED.
                         found = staff;
                     }
                 });
