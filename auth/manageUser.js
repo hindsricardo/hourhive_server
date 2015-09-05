@@ -120,17 +120,7 @@ module.exports = function (server, db, passport) {
 
     server.post('/api/v1/bucketList/org/auth/login', function (req, res, next) {
         var user = req.params;
-        function findStaffMember(dbUser){
-                var found;
-                dbUser.staff.forEach(function (staff) {
-                    if (user.email == staff.email && user.password == staff.password) {
-                        found = staff;
-                    }
-                });
-                return  found;
-        };
-        var thisStaff = new findStaffMember();
-
+        var findStaffMember;
         console.log(user);
         if (user.email.trim().length == 0 || user.password.trim().length == 0 || user.accountUsername.trim().length == 0) {
             res.writeHead(403, {
@@ -143,6 +133,16 @@ module.exports = function (server, db, passport) {
         db.appOrgs.findOne({
             accountUsername: req.params.accountUsername
         }, function (err, dbUser) {
+            findStaffMember = function() {
+                var found;
+                dbUser.staff.forEach(function (staff) {
+                    if (user.email == staff.email && user.password == staff.password) {
+                        found = staff;
+                    }
+                });
+                return  found;
+            };
+
             if(err)
                 console.log(err);//TODO
             if(!dbUser){
@@ -152,7 +152,7 @@ module.exports = function (server, db, passport) {
                 }));
             }
 
-            pwdMgr.comparePassword(user.password, thisStaff(dbUser).password, function (err, isPasswordMatch) {
+            pwdMgr.comparePassword(user.password, findStaffMember().password, function (err, isPasswordMatch) {
                 if(err)
                     console.log(err);
 
@@ -173,7 +173,7 @@ module.exports = function (server, db, passport) {
                 }
 
             });
-            console.log(thisStaff(dbUser), "test test");
+            console.log(findStaffMember(), "test test");
 
         });
         return next();
