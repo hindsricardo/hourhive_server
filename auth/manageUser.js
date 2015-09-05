@@ -162,7 +162,7 @@ module.exports = function (server, db) {
                     });
                     // remove password hash before sending to the client
                     dbUser.staff[0].password = "";
-                    res.end(JSON.stringify(findStaffMember(dbUser.staff[0])));
+                    res.end(JSON.stringify(dbUser.staff[0]));
                 } else {
                     res.writeHead(403, {
                         'Content-Type': 'application/json; charset=utf-8'
