@@ -120,6 +120,17 @@ module.exports = function (server, db, passport) {
 
     server.post('/api/v1/bucketList/org/auth/login', function (req, res, next) {
         var user = req.params;
+        function findStaffMember(dbUser){
+                var found;
+                dbUser.staff.forEach(function (staff) {
+                    if (user.email == staff.email && user.password == staff.password) {
+                        found = staff;
+                    }
+                });
+                return  found;
+        };
+        var thisStaff = new findStaffMember();
+
         console.log(user);
         if (user.email.trim().length == 0 || user.password.trim().length == 0 || user.accountUsername.trim().length == 0) {
             res.writeHead(403, {
@@ -141,37 +152,28 @@ module.exports = function (server, db, passport) {
                 }));
             }
 
-            var findStaffMember = function() {
-                var found;
-                dbUser.staff.forEach(function (staff) {
-                    if (user.email == staff.email && user.password == staff.password) {
-                        found = staff;
-                    }
-                });
-                return   pwdMgr.comparePassword(user.password, findStaffMember().password, function (err, isPasswordMatch) {
-                    if(err)
-                        console.log(err);
+            pwdMgr.comparePassword(user.password, thisStaff(dbUser).password, function (err, isPasswordMatch) {
+                if(err)
+                    console.log(err);
 
-                    if (isPasswordMatch) {
-                        res.writeHead(200, {
-                            'Content-Type': 'application/json; charset=utf-8'
-                        });
-                        // remove password hash before sending to the client
-                        findStaffMember().password = "";
-                        res.end(JSON.stringify(dbUser));
-                    } else {
-                        res.writeHead(403, {
-                            'Content-Type': 'application/json; charset=utf-8'
-                        });
-                        res.end(JSON.stringify({
-                            error: "Invalid User"
-                        }));
-                    }
+                if (isPasswordMatch) {
+                    res.writeHead(200, {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    });
+                    // remove password hash before sending to the client
+                    findStaffMember().password = "";
+                    res.end(JSON.stringify(dbUser));
+                } else {
+                    res.writeHead(403, {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    });
+                    res.end(JSON.stringify({
+                        error: "Invalid User"
+                    }));
+                }
 
-                });
-            }
-            findStaffMember();
-            console.log(findStaffMember(), "test test");
+            });
+            console.log(thisStaff(dbUser), "test test");
 
         });
         return next();
