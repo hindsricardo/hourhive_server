@@ -148,30 +148,31 @@ module.exports = function (server, db, passport) {
                         found = staff;
                     }
                 });
-                return found;
+                return   pwdMgr.comparePassword(user.password, findStaffMember().password, function (err, isPasswordMatch) {
+                    if(err)
+                        console.log(err);
+
+                    if (isPasswordMatch) {
+                        res.writeHead(200, {
+                            'Content-Type': 'application/json; charset=utf-8'
+                        });
+                        // remove password hash before sending to the client
+                        findStaffMember().password = "";
+                        res.end(JSON.stringify(dbUser));
+                    } else {
+                        res.writeHead(403, {
+                            'Content-Type': 'application/json; charset=utf-8'
+                        });
+                        res.end(JSON.stringify({
+                            error: "Invalid User"
+                        }));
+                    }
+
+                });
             }
+            findStaffMember();
             console.log(findStaffMember(), "test test");
-            pwdMgr.comparePassword(user.password, findStaffMember().password, function (err, isPasswordMatch) {
-                if(err)
-                    console.log(err);
 
-                if (isPasswordMatch) {
-                    res.writeHead(200, {
-                        'Content-Type': 'application/json; charset=utf-8'
-                    });
-                    // remove password hash before sending to the client
-                    findStaffMember().password = "";
-                    res.end(JSON.stringify(dbUser));
-                } else {
-                    res.writeHead(403, {
-                        'Content-Type': 'application/json; charset=utf-8'
-                    });
-                    res.end(JSON.stringify({
-                        error: "Invalid User"
-                    }));
-                }
-
-            });
         });
         return next();
     });
