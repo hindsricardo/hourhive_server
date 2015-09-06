@@ -154,15 +154,18 @@ module.exports = function (server, db) {
                 });
                 return  person;
             };
-            pwdMgr.comparePassword(user.password, dbUser.staff[0].password, function (err, isPasswordMatch) {
+
+            var Person = findStaffMember(dbUser);
+
+            pwdMgr.comparePassword(user.password, Person.password, function (err, isPasswordMatch) {
 
                 if (isPasswordMatch) {
                     res.writeHead(200, {
                         'Content-Type': 'application/json; charset=utf-8'
                     });
                     // remove password hash before sending to the client
-                    dbUser.staff[0].password = "";
-                    res.end(JSON.stringify(dbUser.staff[0]));
+                    Person.password = "";
+                    res.end(JSON.stringify(Person));
                 } else {
                     res.writeHead(403, {
                         'Content-Type': 'application/json; charset=utf-8'
@@ -171,7 +174,7 @@ module.exports = function (server, db) {
                         error: "Invalid User"
                     }));
                 }
-                console.log(dbUser.staff[0].password, "test test");
+                console.log(Person.password, "test test");
 
             });
 
