@@ -131,7 +131,7 @@ module.exports = function (server, db) {
             }));
         }
         db.appOrgs.findOne({
-            accountUsername: req.params.accountUsername
+            accountUsername: user.accountUsername
         }, function (err, dbUser) {
             console.log(dbUser);
 
