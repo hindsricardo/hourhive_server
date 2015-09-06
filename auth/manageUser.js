@@ -144,7 +144,7 @@ module.exports = function (server, db) {
                 }));
             }
 
-            /*var findStaffMember = function(org) {
+            var findStaffMember = function(org) {
                 var person;
                 org.staff.forEach(function (staff) {
                     if (user.email == staff.email) { //EMAILS CANNOT BE DUPLICATED OR ONLY THE LAST STAFF EMAIL FOUND WILL BE RETURNED.
@@ -153,9 +153,8 @@ module.exports = function (server, db) {
                     }
                 });
                 return  person;
-            };*/
-
-           /* pwdMgr.comparePassword(user.password, dbUser.staff[0].password, function (err, isPasswordMatch) {
+            };
+            pwdMgr.comparePassword(user.password, dbUser.staff[0].password, function (err, isPasswordMatch) {
 
                 if (isPasswordMatch) {
                     res.writeHead(200, {
@@ -174,7 +173,7 @@ module.exports = function (server, db) {
                 }
                 console.log(dbUser.staff[0].password, "test test");
 
-            });*/
+            });
 
         });
         return next();
