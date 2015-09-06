@@ -155,7 +155,7 @@ module.exports = function (server, db) {
                 return  person;
             };*/
 
-            pwdMgr.comparePassword(user.password, dbUser.staff[0].password, function (err, isPasswordMatch) {
+           /* pwdMgr.comparePassword(user.password, dbUser.staff[0].password, function (err, isPasswordMatch) {
 
                 if (isPasswordMatch) {
                     res.writeHead(200, {
@@ -174,7 +174,7 @@ module.exports = function (server, db) {
                 }
                 console.log(dbUser.staff[0].password, "test test");
 
-            });
+            });*/
 
         });
         return next();
