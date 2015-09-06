@@ -120,12 +120,10 @@ module.exports = function (server, db) {
 
     server.post('/api/v1/bucketList/org/auth/login', function (req, res, next) {
         var user = req.params;
-        console.log(user);
         if (user.email.trim().length == 0 || user.password.trim().length == 0 || user.accountUsername.trim().length == 0) {
             res.writeHead(403, {
                 'Content-Type': 'application/json; charset=utf-8'
             });
-            console.log("testing something");//TODO DELETE
             res.end(JSON.stringify({
                 error: "Invalid Credentials"
             }));
@@ -133,10 +131,9 @@ module.exports = function (server, db) {
         db.appOrgs.findOne({
             accountUsername: user.accountUsername
         }, function (err, dbUser) {
-            console.log(dbUser);
 
             if(err)
-                console.log(err);//TODO
+                console.log(err);
             if(!dbUser || dbUser == null){
                 res.writeHead(403, contentTypeTipo);
                 res.end(JSON.stringify({
@@ -174,7 +171,6 @@ module.exports = function (server, db) {
                         error: "Invalid User"
                     }));
                 }
-                console.log(Person.password, "test test");
 
             });
 
