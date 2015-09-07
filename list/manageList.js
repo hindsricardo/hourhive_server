@@ -3,9 +3,7 @@ module.exports = function (server, db) {
 
     server.get("/api/v1/bucketList/data/list", function (req, res, next) {
         validateRequest.validate(req, res, db, function () {
-            db.bucketLists.find({
-
-            },function (err, list) {
+            db.bucketLists.find({},function (err, list) {
                 res.writeHead(200, {
                     'Content-Type': 'application/json; charset=utf-8'
                 });
