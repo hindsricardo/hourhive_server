@@ -16,7 +16,7 @@ module.exports = function (server, db) {
     server.get("/api/v1/bucketList/org/data/list", function (req, res, next) {
         validateRequest.validate(req, res, db, function () {
             db.bucketLists.find({
-                accountUsername : req.params.token
+                accountUsername : req.params.token //find the accountUsername associated with the listing
             },function (err, list) {
                 res.writeHead(200, {
                     'Content-Type': 'application/json; charset=utf-8'
