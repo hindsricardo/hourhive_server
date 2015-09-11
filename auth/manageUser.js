@@ -1,4 +1,6 @@
 var pwdMgr = require('./managePasswords');
+var validateRequest = require("./validateRequest");
+
 
 
 module.exports = function (server, db) {
@@ -174,6 +176,20 @@ module.exports = function (server, db) {
 
             });
 
+        });
+        return next();
+    });
+
+    server.get('/api/v1/bucketList/data/user',function(req, res, next){
+        validateRequest.validate(req, res, db, function () {
+            db.appUsers.findOne({
+                email: req.params.token
+            }, function (err, data) {
+                res.writeHead(200, {
+                    'Content-Type': 'application/json; charset=utf-8'
+                });
+                res.end(JSON.stringify(data));
+            });
         });
         return next();
     });
