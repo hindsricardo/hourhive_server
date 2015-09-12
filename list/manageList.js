@@ -24,7 +24,7 @@ module.exports = function (server, db) {
                 });
                 res.end(JSON.stringify(list));
             });
-        });git
+        });
         return next();
     });
 
