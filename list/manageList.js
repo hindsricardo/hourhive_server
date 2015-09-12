@@ -1,5 +1,6 @@
 module.exports = function (server, db) {
     var validateRequest = require("../auth/validateRequest");
+    var validateOrgRequest = require("../auth/validateOrgRequest");
 
     server.get("/api/v1/bucketList/data/list", function (req, res, next) {
         validateRequest.validate(req, res, db, function () {
@@ -14,7 +15,7 @@ module.exports = function (server, db) {
     });
 
     server.get("/api/v1/bucketList/org/data/list", function (req, res, next) {
-        validateRequest.validate(req, res, db, function () {
+        validateOrgRequest.validate(req, res, db, function () {
             db.bucketLists.find({
                 accountUsername : req.params.token //find the accountUsername associated with the listing
             },function (err, list) {
@@ -43,7 +44,7 @@ module.exports = function (server, db) {
     });
 
     server.post('/api/v1/bucketList/data/item', function (req, res, next) {
-        validateRequest.validate(req, res, db, function () {
+        validateOrgRequest.validate(req, res, db, function () {
             var item = req.params;
             db.bucketLists.save(item,
                 function (err, data) {
