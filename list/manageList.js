@@ -91,7 +91,6 @@ module.exports = function (server, db) {
     server.put('/api/v1/bucketList/data/item/book/:id', function (req, res, next) {
         validateRequest.validate(req, res, db, function () {
                 var query = JSON.parse(req.params.query);
-                console.log(req.params);
                 db.bucketLists.update({
                     _id: db.ObjectId(req.params.id)
                 },query, {
