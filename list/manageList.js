@@ -90,10 +90,10 @@ module.exports = function (server, db) {
 
     server.put('/api/v1/bucketList/data/item/book/:id', function (req, res, next) {
         validateRequest.validate(req, res, db, function () {
-
+                //var item = req.params;
                 db.bucketLists.update({
                     _id: db.ObjectId(req.params.id)
-                }, {$push:{booked: $req.form}}, {
+                }, {$push:{booked: req.form}}, {
                     multi: false
                 }, function (err, data) {
                     res.writeHead(200, {
