@@ -64,7 +64,7 @@ module.exports = function (server, db) {
             }, function (err, data) {
                 // merge req.params/product with the server/product
 
-                var updProd = {}; // updated products 
+                var updProd = {}; // updated products
                 // logic similar to jQuery.extend(); to merge 2 objects.
                 for (var n in data) {
                     updProd[n] = data[n];
@@ -84,6 +84,23 @@ module.exports = function (server, db) {
                     res.end(JSON.stringify(data));
                 });
             });
+        });
+        return next();
+    });
+
+    server.put('/api/v1/bucketList/data/item/book:id', function (req, res, next) {
+        validateRequest.validate(req, res, db, function () {
+
+                db.bucketLists.update({
+                    _id: db.ObjectId(req.params.id)
+                }, {$push:{booked: $req.form}}, {
+                    multi: false
+                }, function (err, data) {
+                    res.writeHead(200, {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    });
+                    res.end(JSON.stringify(data));
+                });
         });
         return next();
     });
