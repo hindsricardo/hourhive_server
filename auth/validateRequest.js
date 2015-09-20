@@ -6,7 +6,7 @@ var isEmailValid = function (db, email, callback) {
     });
 };
 
-var isEmailAccountUsername = function (db, username, callback) {
+var isAccountUsernameValid = function (db, username, callback) {
     db.appOrgs.findOne({
         accountUsername: username
     }, function (err, org) {
@@ -29,7 +29,7 @@ module.exports.validate = function (req, res, db, callback) {
 
     isEmailValid(db, req.params.token, function (user) {
         if (!user) {
-            isEmailAccountUsername(db,req.params.token, function(org){
+            isAccountUsernameValid(db, req.params.token, function (org){
                 if(!org) {
                     res.writeHead(403, {
                         'Content-Type': 'application/json; charset=utf-8'

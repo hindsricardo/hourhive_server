@@ -42,6 +42,19 @@ module.exports = function (server, db) {
         });
         return next();
     });
+    server.get('/api/v1/bucketList/data/item/org/:id', function (req, res, next) {
+        validateOrgRequest.validate(req, res, db, function () {
+            db.bucketLists.findOne({
+                _id: db.ObjectId(req.params.id)
+            }, function (err, data) {
+                res.writeHead(200, {
+                    'Content-Type': 'application/json; charset=utf-8'
+                });
+                res.end(JSON.stringify(data));
+            });
+        });
+        return next();
+    });
 
     server.post('/api/v1/bucketList/data/item', function (req, res, next) {
         validateOrgRequest.validate(req, res, db, function () {
