@@ -19,7 +19,7 @@ module.exports.validate = function (req, res, db, callback) {
     };
 
 
-    isEmailValid(db, req.params.token, function (user) {
+    isAccountUsernameValid(db, req.params.token, function (user) {
         if (!user) {
             res.writeHead(403, {
                 'Content-Type': 'application/json; charset=utf-8'
