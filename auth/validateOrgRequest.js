@@ -1,4 +1,4 @@
-var isEmailValid = function (db, username, callback) {
+var isAccountUsernameValid = function (db, username, callback) {
     db.appOrgs.findOne({
         accountUsername: username
     }, function (err, user) {
