@@ -31,7 +31,7 @@ module.exports = function (server, db) {
 
     server.get('/api/v1/bucketList/data/item/:id', function (req, res, next) {
         validateRequest.validate(req, res, db, function () {
-            db.bucketLists.find({
+            db.bucketLists.findOne({
                 _id: db.ObjectId(req.params.id)
             }, function (err, data) {
                 res.writeHead(200, {
