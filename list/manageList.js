@@ -70,8 +70,8 @@ module.exports = function (server, db) {
         return next();
     });
 
-    server.put('/api/v1/bucketList/data/item/:id', function (req, res, next) {
-        validateRequest.validate(req, res, db, function () {
+    server.put('/api/v1/bucketList/data/item/update/:id', function (req, res, next) {
+        validateOrgRequest.validate(req, res, db, function () {
             db.bucketLists.findOne({
                 _id: db.ObjectId(req.params.id)
             }, function (err, data) {
