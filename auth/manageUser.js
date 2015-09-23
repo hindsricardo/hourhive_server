@@ -1,5 +1,7 @@
 var pwdMgr = require('./managePasswords');
 var validateRequest = require("./validateRequest");
+var validateOrgRequest = require("./validateOrgRequest");
+
 
 
 
@@ -184,6 +186,20 @@ module.exports = function (server, db) {
         validateRequest.validate(req, res, db, function () {
             db.appUsers.findOne({
                 email: req.params.token
+            }, function (err, data) {
+                res.writeHead(200, {
+                    'Content-Type': 'application/json; charset=utf-8'
+                });
+                res.end(JSON.stringify(data));
+            });
+        });
+        return next();
+    });
+
+    server.get('/api/v1/bucketList/data/org',function(req, res, next){
+        validateOrgRequest.validate(req, res, db, function () {
+            db.appOrgs.findOne({
+                accountUsername: req.params.token
             }, function (err, data) {
                 res.writeHead(200, {
                     'Content-Type': 'application/json; charset=utf-8'
