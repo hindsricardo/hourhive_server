@@ -240,4 +240,21 @@ module.exports = function (server, db) {
         });
         return next();
     });
+
+    server.put('/api/v1/bucketList/data/org/add/staff/:id',function(req, res, next){
+        validateOrgRequest.validate(req, res, db, function () {
+
+                db.appOrgs.update({
+                    _id: db.ObjectId(req.params.id)
+                }, {$push: {staff: req.params.form}}, {
+                    multi: false
+                }, function (err, data) {
+                    res.writeHead(200, {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    });
+                    res.end(JSON.stringify(data));
+                });
+            });
+        return next();
+    });
 };
