@@ -246,8 +246,8 @@ module.exports = function (server, db) {
 
                 db.appOrgs.update({
                     _id: db.ObjectId(req.params.id)
-                }, {$push: {staff: req.params.form}}, {
-                    multi: false
+                }, {staff: req.params.form}, {
+                    multi: true
                 }, function (err, data) {
                     res.writeHead(200, {
                         'Content-Type': 'application/json; charset=utf-8'
