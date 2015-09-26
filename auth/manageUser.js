@@ -241,7 +241,7 @@ module.exports = function (server, db) {
         return next();
     });
 
-    server.put('/api/v1/bucketList/data/org/add/staff/:id',function(req, res, next){
+    server.put('/api/v1/bucketList/data/org/add/:id',function(req, res, next){
         validateOrgRequest.validate(req, res, db, function () {
 
                 db.appOrgs.update({
