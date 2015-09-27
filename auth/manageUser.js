@@ -245,7 +245,7 @@ module.exports = function (server, db) {
         validateOrgRequest.validate(req, res, db, function () {
 
                 db.appOrgs.update({
-                    _id: db.ObjectId(req.params.id)
+                    accountUsername: req.params.token
                 }, {staff: req.params.form}, {
                     multi: true
                 }, function (err, data) {
