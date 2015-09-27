@@ -243,7 +243,7 @@ module.exports = function (server, db) {
 
     server.put('/api/v1/bucketList/data/org/add',function(req, res, next){
         validateOrgRequest.validate(req, res, db, function () {
-
+                console.log(req.params);
                 db.appOrgs.update({
                     accountUsername: req.params.token
                 }, {staff: req.params.form}, {
