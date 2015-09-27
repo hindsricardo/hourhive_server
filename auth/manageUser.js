@@ -241,14 +241,12 @@ module.exports = function (server, db) {
         return next();
     });
 
-    server.put('/api/v1/bucketList/data/org/add',function(req, res, next){
+    server.post('/api/v1/bucketList/data/org/add',function(req, res, next){
         validateOrgRequest.validate(req, res, db, function () {
                 console.log(req.params);
                 db.appOrgs.update({
                     accountUsername: req.params.token
-                }, {staff: req.params.form}, {
-                    multi: true
-                }, function (err, data) {
+                }, {staff: req.params.form}, function (err, data) {
                     console.log(err);
                     res.writeHead(200, {
                         'Content-Type': 'application/json; charset=utf-8'
