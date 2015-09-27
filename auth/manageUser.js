@@ -249,6 +249,7 @@ module.exports = function (server, db) {
                 }, {staff: req.params.form}, {
                     multi: true
                 }, function (err, data) {
+                    console.log(err);
                     res.writeHead(200, {
                         'Content-Type': 'application/json; charset=utf-8'
                     });
