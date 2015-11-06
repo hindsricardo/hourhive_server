@@ -71,6 +71,8 @@ module.exports = function (server, db) {
     });
 
     server.put('/api/v1/bucketList/data/item/update/:id', function (req, res, next) {
+        console.log(req.params);
+
         validateOrgRequest.validate(req, res, db, function () {
                 db.bucketLists.update({
                     _id: db.ObjectId(req.params.id)
