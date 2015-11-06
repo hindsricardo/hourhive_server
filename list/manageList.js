@@ -77,12 +77,12 @@ module.exports = function (server, db) {
                 db.bucketLists.update({
                     _id: db.ObjectId(req.params.id)
                 }, {$set:{
-                    title:req.params.form.title,
-                    capacity: req.params.form.capacity,
-                    updated: req.params.form.updated,
-                    location: req.params.form.location,
-                    description: req.params.form.description,
-                    customFields: req.params.form.customFields
+                    title:req.params.title,
+                    capacity: req.params.capacity,
+                    updated: req.params.updated,
+                    location: req.params.location,
+                    description: req.params.description,
+                    customFields: req.params.customFields
 
                 }}, {
                     multi: false
