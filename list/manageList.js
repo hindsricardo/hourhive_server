@@ -72,23 +72,17 @@ module.exports = function (server, db) {
 
     server.put('/api/v1/bucketList/data/item/update/:id', function (req, res, next) {
         validateOrgRequest.validate(req, res, db, function () {
-            db.bucketLists.findOne({
-                _id: db.ObjectId(req.params.id)
-            }, function (err, data) {
-                // merge req.params/product with the server/product
-
-                var updProd = {}; // updated products
-                // logic similar to jQuery.extend(); to merge 2 objects.
-                for (var n in data) {
-                    updProd[n] = data[n];
-                }
-                for (var n in req.params) {
-                    if (n != "id")
-                        updProd[n] = req.params[n];
-                }
                 db.bucketLists.update({
                     _id: db.ObjectId(req.params.id)
-                }, updProd, {
+                }, {$set:{
+                    title:form.title,
+                    capacity: form.capacity,
+                    updated: form.updated,
+                    location: form.location,
+                    description: form.description,
+                    customFields: customFields
+
+                }}, {
                     multi: false
                 }, function (err, data) {
                     res.writeHead(200, {
@@ -96,7 +90,6 @@ module.exports = function (server, db) {
                     });
                     res.end(JSON.stringify(data));
                 });
-            });
         });
         return next();
     });
