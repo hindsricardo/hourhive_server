@@ -240,11 +240,11 @@ module.exports = function (server, db) {
 
     server.put('/api/v1/bucketList/data/org/add/:id',function(req, res, next){
         validateOrgRequest.validate(req, res, db, function () {
-                console.log(req.params);
+                console.log(req.params.form);
                 db.appOrgs.update({
                     _id: db.ObjectId(req.params.id)
                 }, {$set:{staff: req.params.form}}, function (err, data) {
-                    console.log(err);
+                    console.log('AN ERROR HAS OCCURED',err);
                     res.writeHead(200, {
                         'Content-Type': 'application/json; charset=utf-8'
                     });
