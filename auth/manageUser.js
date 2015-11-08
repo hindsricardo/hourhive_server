@@ -1,8 +1,8 @@
 
 module.exports = function (server, db) {
     var pwdMgr = require('./managePasswords');
-    var validateRequest = require("./validateRequest");
-    var validateOrgRequest = require("./validateOrgRequest");
+    var validateRequest = require('./validateRequest');
+    var validateOrgRequest = require('./validateOrgRequest');
     // unique index
     db.appUsers.createIndex({
         email: 1
@@ -244,7 +244,9 @@ module.exports = function (server, db) {
                 db.appOrgs.update({
                     _id: db.ObjectId(req.params.id)
                 }, {$set:{staff: req.params.form}}, function (err, data) {
-                    console.log('AN ERROR HAS OCCURED',err);
+                    if(err){
+                        console.log('AN ERROR HAS OCCURED',err);
+                    }
                     res.writeHead(200, {
                         'Content-Type': 'application/json; charset=utf-8'
                     });
