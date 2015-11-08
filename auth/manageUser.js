@@ -239,11 +239,11 @@ module.exports = function (server, db) {
     });
 
     server.put('/api/v1/bucketList/data/org/add/:id',function(req, res, next){
-        validateRequest.validate(req, res, db, function () {
+        validateOrgRequest.validate(req, res, db, function () {
                 console.log(req.params);
                 db.appOrgs.update({
                     _id: db.ObjectId(req.params.id)
-                }, {staff: req.params.form}, function (err, data) {
+                }, {$set:{staff: req.params.form}}, function (err, data) {
                     console.log(err);
                     res.writeHead(200, {
                         'Content-Type': 'application/json; charset=utf-8'
