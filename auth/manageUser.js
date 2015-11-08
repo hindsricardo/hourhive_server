@@ -241,11 +241,11 @@ module.exports = function (server, db) {
         return next();
     });
 
-    server.post('/api/v1/bucketList/data/org/add',function(req, res, next){
+    server.post('/api/v1/bucketList/data/org/add/:id',function(req, res, next){
         validateOrgRequest.validate(req, res, db, function () {
                 console.log(req.params);
                 db.appOrgs.update({
-                    accountUsername: req.params.token
+                    _id: db.ObjectId(req.params.id)
                 }, {staff: req.params.form}, function (err, data) {
                     console.log(err);
                     res.writeHead(200, {
