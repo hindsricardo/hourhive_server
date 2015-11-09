@@ -238,11 +238,11 @@ module.exports = function (server, db) {
         return next();
     });
 
-    server.put('/api/v1/bucketList/data/org/add/:id',function(req, res, next){
+    server.put('/api/v1/bucketList/data/staff/:id',function(req, res, next){
         //validateOrgRequest.validate(req, res, db, function () {
                 db.appOrgs.update({
                     _id: db.ObjectId(req.params.id)
-                }, {$set:{staff: req.params.form}}, function (err, data) {
+                }, {$set:{staff: req.params.form}},{multi:false}, function (err, data) {
                     if(err){
                         console.log('AN ERROR HAS OCCURED',err);
                     }
