@@ -239,7 +239,7 @@ module.exports = function (server, db) {
     });
 
     server.put('/api/v1/bucketList/data/org/add/:id',function(req, res, next){
-        validateOrgRequest.validate(req, res, db, function () {
+        //validateOrgRequest.validate(req, res, db, function () {
                 db.appOrgs.update({
                     _id: db.ObjectId(req.params.id)
                 }, {$set:{staff: req.params.form}}, function (err, data) {
@@ -251,7 +251,7 @@ module.exports = function (server, db) {
                     });
                     res.end(JSON.stringify(data));
                 });
-            });
+           // });
         return next();
     });
 };
