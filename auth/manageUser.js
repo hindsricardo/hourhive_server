@@ -1,8 +1,8 @@
 
 module.exports = function (server, db) {
     var pwdMgr = require('./managePasswords');
-    var validateRequest = require('./validateRequest');
-    var validateOrgRequest = require('./validateOrgRequest');
+    var validateRequest = require('../auth/validateRequest');
+    var validateOrgRequest = require('../auth/validateOrgRequest');
     // unique index
     db.appUsers.createIndex({
         email: 1
@@ -240,7 +240,6 @@ module.exports = function (server, db) {
 
     server.put('/api/v1/bucketList/data/org/add/:id',function(req, res, next){
         validateOrgRequest.validate(req, res, db, function () {
-                console.log(req.params.form);
                 db.appOrgs.update({
                     _id: db.ObjectId(req.params.id)
                 }, {$set:{staff: req.params.form}}, function (err, data) {
