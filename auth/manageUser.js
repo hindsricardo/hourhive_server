@@ -239,10 +239,11 @@ module.exports = function (server, db) {
     });
 
     server.put('/api/v1/bucketList/data/staff/:id',function(req, res, next){
-        //validateOrgRequest.validate(req, res, db, function () {
+        validateOrgRequest.validate(req, res, db, function () {
+
                 db.appOrgs.update({
                     _id: db.ObjectId(req.params.id)
-                }, {$set:{staff: req.params.form}},{multi:false}, function (err, data) {
+                }, {$push:{staff: req.params.form}},{multi:false}, function (err, data) {
                     if(err){
                         console.log('AN ERROR HAS OCCURED',err);
                     }
@@ -251,7 +252,7 @@ module.exports = function (server, db) {
                     });
                     res.end(JSON.stringify(data));
                 });
-           // });
+           });
         return next();
     });
 };
