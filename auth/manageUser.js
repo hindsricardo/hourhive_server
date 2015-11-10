@@ -242,7 +242,11 @@ module.exports = function (server, db) {
         validateOrgRequest.validate(req, res, db, function () {
                 db.appOrgs.update({
                     _id: db.ObjectId(req.params.id)
-                }, {$set:{staff: req.params.query}},{multi:false}, function (err, data) {
+                }, {$set:{
+                    staff: req.params.query
+                }},{
+                    multi:false
+                }, function (err, data) {
                     if(err){
                         console.log('AN ERROR HAS OCCURED',err);
                     }

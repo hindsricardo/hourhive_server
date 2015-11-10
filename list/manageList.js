@@ -71,8 +71,6 @@ module.exports = function (server, db) {
     });
 
     server.put('/api/v1/bucketList/data/item/update/:id', function (req, res, next) {
-        console.log(req.params);
-
         validateOrgRequest.validate(req, res, db, function () {
                 db.bucketLists.update({
                     _id: db.ObjectId(req.params.id)
@@ -114,7 +112,7 @@ module.exports = function (server, db) {
     });
 
     server.del('/api/v1/bucketList/data/item/:id', function (req, res, next) {
-        validateRequest.validate(req, res, db, function () {
+        validateOrgRequest.validate(req, res, db, function () {
             db.bucketLists.remove({
                 _id: db.ObjectId(req.params.id)
             }, function (err, data) {
