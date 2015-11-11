@@ -78,6 +78,7 @@ module.exports = function (server, db) {
                     title:req.params.title,
                     capacity: req.params.capacity,
                     updated: req.params.updated,
+                    archived:req.params.archived,
                     location: req.params.location,
                     description: req.params.description,
                     customFields: req.params.customFields
