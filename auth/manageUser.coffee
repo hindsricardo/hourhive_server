@@ -8,94 +8,64 @@ module.exports = (server, db) ->
   db.constraints.uniqueness.createIfNone 'appOrgs', 'accountUsername', (err, constraints) ->
     console.log constraints
 
-  # USER REGISTER
+  # USER REGISTER & LOGIN
   server.post '/api/v1/bucketList/auth/register', (req, res, next) ->
     user = req.params
-    pwdMgr.cryptPassword user.password, (err, hash) ->
-      user.password = hash
-      db.save user,['appUsers'], (err, dbUser) ->
-        if err
-          # duplicate key error
-          if err.code == 11000
-            res.writeHead 400, 'Content-Type': 'application/json; charset=utf-8'
-            res.end JSON.stringify(
-              error: err
-              message: 'A user with this email already exists')
-        else
-          res.writeHead 200, 'Content-Type': 'application/json; charset=utf-8'
-          dbUser.password = '' #clear password before returning JSON object
-          res.end JSON.stringify(dbUser)
+    if user.email.trim().length == 0 or user.phone.trim().length == 0
+      res.writeHead 403, 'Content-Type': 'application/json; charset=utf-8'
+      res.end JSON.stringify(error: 'Invalid Credentials')
+    db.find {email:user.email.trim()}, ['appUsers'], (err, thisUser) ->
+      if err
+        throw err
+      else if thisUser.length > 0
+        res.writeHead 200, 'Content-Type': 'application/json; charset=utf-8'
+        res.end JSON.stringify(thisUser[0])
+      else
+        db.save user,['appUsers'], (err, dbUser) ->
+          if err
+              res.writeHead 400, 'Content-Type': 'application/json; charset=utf-8'
+              res.end JSON.stringify(
+                error: err
+                message: 'A user with this email already exists')
+          else
+            res.writeHead 200, 'Content-Type': 'application/json; charset=utf-8'
+            res.end JSON.stringify(dbUser[0])
+          return
         return
-      return
     next()
-  # ORG REGISTER
+  # ORG REGISTER & LOGIN
   server.post '/api/v1/bucketList/org/auth/register', (req, res, next) ->
     user = req.params
-    pwdMgr.cryptPassword user.password, (err, hash) ->
-      user.password = hash
-      if !user.accountUsername
-        res.writeHead 403, 'Content-Type': 'application/json; charset=utf-8'
-        res.end JSON.stringify(
-          message: 'The submission is missing accountUsername key')
-      else
-        db.save user, ['appOrgs'], (err, dbUser) ->
-          if err
-            # duplicate key error
-            res.writeHead 400, 'Content-Type': 'application/json; charset=utf-8'
-            res.end JSON.stringify(
-              error: err
-              message: 'An Organization with this username already exists')
-          else
-            res.writeHead 200, 'Content-Type': 'application/json; charset=utf-8'
-            dbUser.password = ''
-            res.end JSON.stringify(dbUser)
-        return
-      return
-    next()
-  server.post '/api/v1/bucketList/auth/login', (req, res, next) ->
-    user = req.params
-    if user.email.trim().length == 0 or user.password.trim().length == 0
+    if user.accountUsername.trim().length == 0
       res.writeHead 403, 'Content-Type': 'application/json; charset=utf-8'
       res.end JSON.stringify(error: 'Invalid Credentials')
-    db.find { email: req.params.email }, ['appUsers'], (err, dbUser) ->
-      if dbUser.length < 1
-        #if the database finds no email, it will return null, but any falsey will also mean something's amiss
-        res.writeHead 403, contentTypeTipo
-        res.end JSON.stringify(error: 'Invalid credentials. User not found.')
-      pwdMgr.comparePassword user.password, dbUser.password, (err, isPasswordMatch) ->
-        if isPasswordMatch
-          res.writeHead 200, 'Content-Type': 'application/json; charset=utf-8'
-          # remove password hash before sending to the client
-          dbUser.password = ''
-          res.end JSON.stringify(dbUser)
+    else
+      db.find {accountUsername: user.accountUsername}, ['appOrgs'], (err, org) ->
+        if org.length > 0
+          pwdMgr.comparePassword user.password, org[0].password, (err, isPasswordMatch) ->
+            if isPasswordMatch
+              res.writeHead 200, 'Content-Type':'application/json; charset=utf-8'
+              res.end JSON.stringify(org[0])
         else
-          res.writeHead 403, 'Content-Type': 'application/json; charset=utf-8'
-          res.end JSON.stringify(error: 'Invalid User')
-        return
-      return
-    next()
-  server.post '/api/v1/bucketList/org/auth/login', (req, res, next) ->
-    user = req.params
-    if user.email.trim().length == 0 or user.password.trim().length == 0 or user.accountUsername.trim().length == 0
-      res.writeHead 403, 'Content-Type': 'application/json; charset=utf-8'
-      res.end JSON.stringify(error: 'Invalid Credentials')
-    db.find { accountUsername: user.accountUsername }, ['appOrgs'], (err, dbUser) ->
-      if err
-        console.log err
-      if dbUser.length < 1
-        res.writeHead 403, contentTypeTipo
-        res.end JSON.stringify(error: 'Invalid credentials. User not found.')
-      else
-        pwdMgr.comparePassword user.password, dbUser[0].password, (err, isPasswordMatch) ->
-          if isPasswordMatch
-            res.writeHead 200, 'Content-Type': 'application/json; charset=utf-8'
-            # remove password hash before sending to the client
-            dbUser[0].password = ''
-            res.end JSON.stringify(dbUser[0])
-          else
-            res.writeHead 403, 'Content-Type': 'application/json; charset=utf-8'
-            res.end JSON.stringify(error: 'Invalid User')
-          return
+          pwdMgr.cryptPassword user.password, (err, hash) ->
+            user.password = hash
+            if !user.accountUsername
+              res.writeHead 403, 'Content-Type': 'application/json; charset=utf-8'
+              res.end JSON.stringify(
+                message: 'The submission is missing accountUsername key')
+            else
+              db.save user, ['appOrgs'], (err, dbUser) ->
+                if err
+                  # duplicate key error
+                  res.writeHead 400, 'Content-Type': 'application/json; charset=utf-8'
+                  res.end JSON.stringify(
+                    error: err
+                    message: 'Something went wrong adding this organization. Please try again')
+                else
+                  res.writeHead 200, 'Content-Type': 'application/json; charset=utf-8'
+                  dbUser.password = ''
+                  res.end JSON.stringify(dbUser[0])
+              return
       return
     next()
   server.get '/api/v1/bucketList/data/user', (req, res, next) ->
@@ -114,7 +84,7 @@ module.exports = (server, db) ->
         return
       return
     next()
-  server.put '/api/v1/bucketList/data/org/:id', (req, res, next) ->
+  ###server.put '/api/v1/bucketList/data/org/:id', (req, res, next) ->
     validateOrgRequest.validate req, res, db, ->
       db.find { _id: db.ObjectId(req.params.id) },['appOrgs'], (err, data) ->
         `var n`
@@ -143,5 +113,5 @@ module.exports = (server, db) ->
         res.end JSON.stringify(data)
         return
       return
-    next()
+    next()###
   return

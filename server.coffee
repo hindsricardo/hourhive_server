@@ -27,8 +27,8 @@ server.use (req, res, next) ->
   res.header 'Access-Control-Allow-Headers', 'Content-Type'
   next()
   return
-server.listen process.env.PORT or 9801, ->
-  console.log 'Server started @ ', process.env.PORT or 9801
+server.listen process.env.PORT or 9802, ->
+  console.log 'Server started @ ', process.env.PORT or 9802
   return
 manageUsers = require('./auth/manageUser')(server, db)
 #manageLists = require('./list/manageList')(server, db)
